@@ -13,8 +13,8 @@ const morganOption = (NODE_ENV === 'production')
   : 'common';
 
 app.use(morgan(morganOption));
-app.use(express.json());
 app.use(helmet());
+app.use(express.json());
 app.use(cors());
 
 const apiToken = process.env.API_TOKEN;
@@ -43,10 +43,6 @@ const addresses = [
     zip: '30316'
   }
 ]
-
-// app.get('/',(req,res)=>{
-//   res.send('Hello, boilerplate!');
-// });
 
 app.get('/address',(req,res)=>{
   res.json(addresses);
@@ -85,23 +81,16 @@ app.post('/address',(req,res)=>{
 
 app.delete('/address/:id',(req,res)=>{
   const {id} = req.params;
-  const index = addresses.find(address=>address.id===id);
-
+  const index = addresses.indexOf(address=>address.id===id);
   if(!id){
     return res.status(400).send('Please provide an id value')
   }
   if(!index){
     return res.status(400).send('id does not match any entries')
   }
-
   addresses.splice(index,1);
   res.send('Deleted');
 });
-
-//post
-//delete
-
-
 
 app.use(function errorHandler(error, req, res, next){
   let response;
